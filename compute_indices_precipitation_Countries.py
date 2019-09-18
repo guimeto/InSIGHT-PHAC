@@ -26,7 +26,8 @@ ds_year = ds.sel(time='2016')
 anomalies = ((ds_year.groupby('time.month') / climatology)-1)*100
        
         
-shapes = gpd.read_file("D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Countries/Countries_Final-polygon.shp")
+shapes = gpd.read_file("D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Zones/Masque.shp")
+
 list(shapes.columns.values)
 # copy poly to new GeoDataFrame
 points = shapes.copy()
@@ -90,17 +91,17 @@ sns.heatmap(df_ano, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=-
 ax.set_title('Anomalies relatives des accumulations mensuelles de précipitation de 2016 par rapport à la normale 1985-2014', weight='bold', fontsize="x-large")
 figure = ax.get_figure()    
 figure.set_size_inches(22, 15) 
-plt.savefig("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014.png", bbox_inches="tight")
+plt.savefig("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014_new.png", bbox_inches="tight")
 plt.close()
 ax = plt.axes()
 sns.heatmap(df_clim, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=0, vmax=150, fmt='.0f',yticklabels=True, cbar_kws={'label': 'mm'})
 ax.set_title('Climatologie des accumulations mensuelles des précipitations (1985-2014)', weight='bold', fontsize="x-large")
 figure = ax.get_figure()    
 figure.set_size_inches(22, 15) 
-plt.savefig("Climatologies_Mensuelles_Precipitation_1985-2014.png", bbox_inches="tight")
+plt.savefig("Climatologies_Mensuelles_Precipitation_1985-2014_new.png", bbox_inches="tight")
 
-df_ano.to_csv("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014.csv",  header = True, sep = ',')
-df_clim.to_csv("Climatologies_Precipitation_Mensuelles_1985-2014.csv", header = True, sep = ',')
+df_ano.to_csv("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014_newe.csv",  header = True, sep = ',')
+df_clim.to_csv("Climatologies_Precipitation_Mensuelles_1985-2014_new.csv", header = True, sep = ',')
 
 
 
