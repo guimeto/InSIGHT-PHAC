@@ -25,7 +25,7 @@ ds = xr.open_mfdataset(multi_tmin)
 ds_date_range = ds.sel(time=slice('1985', '2014'))
 climatology = ds_date_range.groupby('time.month').mean('time')
 
-ds_year = ds.sel(time='2016')
+ds_year = ds.sel(time='2015')
 anomalies = ds_year.groupby('time.month') - climatology
        
         
@@ -109,10 +109,10 @@ df_clim.columns = shapes['NAME']
 
 ax = plt.axes()
 sns.heatmap(df_ano, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=-2, vmax=2,center=0, fmt='.1f',yticklabels=True, cbar_kws={'label': 'Celcius'})
-ax.set_title('Anomalies des températures mensuelles de 2016 par rapport à la normale 1985-2014', weight='bold', fontsize="x-large")
+ax.set_title('Anomalies des températures mensuelles de 2015 par rapport à la normale 1985-2014', weight='bold', fontsize="x-large")
 figure = ax.get_figure()    
 figure.set_size_inches(22, 15) 
-plt.savefig("Anomalies_Mensuelles_Temperatures_2016_vs_1985-2014_new.png", bbox_inches="tight")
+plt.savefig("Anomalies_Mensuelles_Temperatures_2015_vs_1985-2014_new.png", bbox_inches="tight")
 plt.close()
 ax = plt.axes()
 sns.heatmap(df_clim, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=0, vmax=30, fmt='.0f',yticklabels=True, cbar_kws={'label': 'Celcius'})
@@ -121,7 +121,7 @@ figure = ax.get_figure()
 figure.set_size_inches(22, 15) 
 plt.savefig("Climatologies_Mensuelles_Temperatures_1985-2014_new.png", bbox_inches="tight")
 
-df_ano.to_csv("Anomalies_Mensuelles_Temperatures_2016_vs_1985-2014_new.csv",  header = True, sep = ',')
+df_ano.to_csv("Anomalies_Mensuelles_Temperatures_2015_vs_1985-2014_new.csv",  header = True, sep = ',')
 df_clim.to_csv("Climatologies_Temperatures_Mensuelles_1985-2014_new.csv", header = True, sep = ',')
 
 

@@ -22,7 +22,7 @@ ds = xr.open_mfdataset(multi_pr)
 ds_date_range = ds.sel(time=slice('1985', '2014'))
 climatology = ds_date_range.groupby('time.month').mean('time')
 
-ds_year = ds.sel(time='2016')
+ds_year = ds.sel(time='2015')
 anomalies = ((ds_year.groupby('time.month') / climatology)-1)*100
        
         
@@ -88,10 +88,10 @@ df_clim.columns = shapes['NAME']
 
 ax = plt.axes()
 sns.heatmap(df_ano, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=-100, vmax=100,center=0, fmt='.0f',yticklabels=True, cbar_kws={'label': '%'})
-ax.set_title('Anomalies relatives des accumulations mensuelles de précipitation de 2016 par rapport à la normale 1985-2014', weight='bold', fontsize="x-large")
+ax.set_title('Anomalies relatives des accumulations mensuelles de précipitation de 2015 par rapport à la normale 1985-2014', weight='bold', fontsize="x-large")
 figure = ax.get_figure()    
 figure.set_size_inches(22, 15) 
-plt.savefig("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014_new.png", bbox_inches="tight")
+plt.savefig("Anomalies_Mensuelles_Precipitation_2015_vs_1985-2014_new.png", bbox_inches="tight")
 plt.close()
 ax = plt.axes()
 sns.heatmap(df_clim, cmap='coolwarm', linewidths=0.5, annot=True , ax = ax,vmin=0, vmax=150, fmt='.0f',yticklabels=True, cbar_kws={'label': 'mm'})
@@ -100,7 +100,7 @@ figure = ax.get_figure()
 figure.set_size_inches(22, 15) 
 plt.savefig("Climatologies_Mensuelles_Precipitation_1985-2014_new.png", bbox_inches="tight")
 
-df_ano.to_csv("Anomalies_Mensuelles_Precipitation_2016_vs_1985-2014_newe.csv",  header = True, sep = ',')
+df_ano.to_csv("Anomalies_Mensuelles_Precipitation_2015_vs_1985-2014_newe.csv",  header = True, sep = ',')
 df_clim.to_csv("Climatologies_Precipitation_Mensuelles_1985-2014_new.csv", header = True, sep = ',')
 
 
