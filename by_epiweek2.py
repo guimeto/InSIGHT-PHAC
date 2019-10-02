@@ -45,16 +45,17 @@ while iw2  <  df_epi.shape[0] :
         
         datei1 = '-'.join((str(year),df_epi.iloc[iw1,0].split('-')[1],df_epi.iloc[iw1,0].split('-')[2]))
         datef1 = '-'.join((str(year),df_epi.iloc[iw1,1].split('-')[1],df_epi.iloc[iw1,1].split('-')[2]))
-        ds_week1 = ds.sel(time=slice(datei1, datef1)).sum('time')  
+        ds_week1 = ds.sel(time=slice(datei1, datef1)).sum('time')   
         if iw2 == 51:
             datei2 = '-'.join((str(year),df_epi.iloc[iw2,0].split('-')[1],df_epi.iloc[iw2,0].split('-')[2]))
             datef2 = '-'.join((str(year+1),df_epi.iloc[iw2,1].split('-')[1],df_epi.iloc[iw2,1].split('-')[2]))
         else:
             datei2 = '-'.join((str(year),df_epi.iloc[iw2,0].split('-')[1],df_epi.iloc[iw2,0].split('-')[2]))
             datef2 = '-'.join((str(year),df_epi.iloc[iw2,1].split('-')[1],df_epi.iloc[iw2,1].split('-')[2]))
-        ds_week2 = ds.sel(time=slice(datei2, datef2)).sum('time')
-        ds_new = ds_week1 + ds_week2
+        ds_week2 = ds.sel(time=slice(datei2, datef2)).sum('time')  
+        ds_new = xr.concat([ds_week1, ds_week2])  
         datasets.append(ds_new)
+        
     climatologie_epiweek = (xr.concat(datasets).mean('concat_dims'))  
     
     datei1 = '-'.join((str(year_to_study),df_epi.iloc[iw1,0].split('-')[1],df_epi.iloc[iw1,0].split('-')[2]))
@@ -97,15 +98,25 @@ while iw2  <  df_epi.shape[0] :
             lati =shapes.loc[shapes['NAME'] == name]['centroid_lat'].values
             loni =shapes.loc[shapes['NAME'] == name]['centroid_lon'].values + 360
             
-            anomalies_point = anomalies.sel(longitude=float(loni)  , latitude=float(lati)  , method='nearest')
+            anomalies_point = anomalies.tp(longitude=float(loni)  , latitude=float(lati) , method='nearest')
             climatology_point = climatologie_epiweek.sel(longitude=float(loni)  , latitude=float(lati)  , method='nearest')        
             columns = ['longitude', 'latitude']
+            anomalies_point.tp.values
+            
+            
             df_clim.append(climatology_point.tp.to_dataframe())
             df_ano.append(anomalies_point.tp.to_dataframe().set_index('month'))
         else:
             print('Application du masque np.array')
            
             anomalies_mask = anomalies.where(mask == 1)
+            
+            
+            anomalies_mask.to_netcdf('mask.nc')
+            lat_bnd = [35, 0]
+            lon_bnd = [240, 280]
+            anomalies_mask.tp.sel(longitude=slice(*lon_bnd), latitude=slice(*lat_bnd),)
+            anomalies_mask.sel( )
             climatology_mask = climatologie_epiweek.where(mask == 1)
             df_ano.append(anomalies_mask.tp.mean(dim=('longitude','latitude')).to_dataframe())      
             df_clim.append(climatology_mask.tp.mean(dim=('longitude','latitude')).to_dataframe())

@@ -77,8 +77,10 @@ df_ano=[]
 df_clim=[]
 
 for name in shapes['NAME']:
+   
     mask = np.load(file_mask + 'mask_'+str(name.replace(' ','_'))+'.npy')
     print(np.max(mask))
+    
     if np.max(mask) == 0 :
         print('Recherche du centroid')
         lati =shapes.loc[shapes['NAME'] == name]['centroid_lat'].values
@@ -98,6 +100,7 @@ for name in shapes['NAME']:
         df_ano.append(anomalies_mask.t2m.mean(dim=('longitude','latitude')).to_dataframe().set_index('month'))
        
         df_clim.append(climatology_mask.t2m.mean(dim=('longitude','latitude')).to_dataframe())
+        
 df_clim = pd.concat(df_clim, axis=1)           
 df_ano = pd.concat(df_ano, axis=1)         
 columns = ['longitude', 'latitude']

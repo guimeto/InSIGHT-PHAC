@@ -18,7 +18,13 @@ file_out = 'D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Mask/'
 
 data = file_in +'Monthly_Mean_t2m_198501.nc'
 ds = xr.open_mfdataset(data)
-        
+      
+lat_bnd = [62, -70]
+lon_bnd = [230, 340]
+
+ds2 = ds.sel(longitude=slice(*lon_bnd), latitude=slice(*lat_bnd),)  
+ds2.to_netcdf(file_out + 'small.nc')
+
 ##############################################################
 #Fonction créer par Sasha Huziy (Centre ESCER) afin d'aller récupéré sous forme de shapefile le contour d'une région géographique
 
@@ -79,15 +85,15 @@ def get_mask(lons2d, lats2d, shp_path="", polygon_name=None):
 
     return mask
 
-Imp_Lats =  ds['latitude'].values
-Imp_Lons =  ds['longitude'].values
+Imp_Lats =  ds2['latitude'].values
+Imp_Lons =  ds2['longitude'].values
 lon2d, lat2d = np.meshgrid(Imp_Lons, Imp_Lats)
 
-shapes = gpd.read_file("D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Countries/Countries_Final-polygon.shp")
+shapes = gpd.read_file("D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Zones/Masque.shp")
 list(shapes.columns.values)
 for name in shapes['NAME']:
-    mask=get_mask(lon2d,lat2d,shp_path="D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Countries/Countries_Final-polygon.shp", polygon_name=name)
-    np.save(file_out + 'mask_'+str(name.replace(' ','_'))+'.npy',mask)
-    ds_mask = ds.where(mask == 1)
-    ds_mask.to_netcdf(file_out + 'mask_'+str(name.replace(' ','_'))+'.nc')
+    mask=get_mask(lon2d,lat2d,shp_path="D:/Utilisateurs/guillaume/Documents/GitHub/InSIGHT-PHAC/Zones/Masque.shp", polygon_name=name)
+    np.save(file_out + 'mask_'+str(name.replace(' ','_'))+'_small.npy',mask)
+    ds_mask = ds2.where(mask == 1)
+    ds_mask.to_netcdf(file_out + 'mask_'+str(name.replace(' ','_'))+'_small.nc')
 
