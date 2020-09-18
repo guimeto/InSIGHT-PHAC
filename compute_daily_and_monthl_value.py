@@ -5,7 +5,7 @@ Created on Mon Jul 15 10:31:05 2019
 @author: guillaume
 """
 import xarray as xr
-
+import psutil
 model='ERA5'
 
 yi = 1985
